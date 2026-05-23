@@ -1,0 +1,20 @@
+@echo off
+title Enable RDP
+
+echo Creating User...
+net user RDPUser Pass123 /add
+
+echo Adding Admin Permission...
+net localgroup administrators RDPUser /add
+
+echo Enabling Remote Desktop...
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+
+echo Opening Firewall...
+netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+
+echo Done!
+echo Username: RDPUser
+echo Password: Pass123
+
+pause
