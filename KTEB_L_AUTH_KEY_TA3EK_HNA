@@ -1,0 +1,31 @@
+%%bash
+
+echo "1. Rana n'installiw f' l'interface graphique (XFCE) w l'RDP..."
+apt-get update -qq
+DEBIAN_FRONTEND=noninteractive apt-get install -y xfce4 xfce4-goodies xrdp -qq
+adduser xrdp ssl-cert
+echo xfce4-session > ~/.xsession
+service xrdp start
+
+echo "2. Rana n'creyiw f' l'utilisateur Bullettemporary..."
+useradd -m -s /bin/bash Bullettemporary
+echo "Bullettemporary:Bullet@12345" | chpasswd
+usermod -aG sudo Bullettemporary
+
+echo "3. Rana n'installiw w n'lanciou f' Tailscale..."
+curl -fsSL https://tailscale.com/install.sh | sh
+nohup tailscaled --tun=userspace-networking > /dev/null 2>&1 &
+sleep 5
+
+# --- BADEL L'AUTH KEY HNA ---
+tailscale up --authkey="KTEB_L_AUTH_KEY_TA3EK_HNA" --hostname="colab-bullet"
+
+echo "======================================================"
+echo "Koulchi mriguel! Rouh l'Tailscale, jib l'IP ta3 'colab-bullet'."
+echo "Afta7 application RDP w dakhel:"
+echo "User: Bullettemporary"
+echo "Pass: Bullet@12345"
+echo "======================================================"
+
+# 4. Nkhalliw l'cellule temchi bech l'machine f'Colab matatfach
+sleep infinity
